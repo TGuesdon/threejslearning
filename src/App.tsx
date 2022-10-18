@@ -1,37 +1,35 @@
-import React, { useEffect, useRef } from "react";
-import { Canvas, ThreeEvent } from "@react-three/fiber";
-
 import "./App.css";
 import styled from "styled-components";
-import { Mesh } from "three";
-import useWindowSize from "./hooks";
+import OrbitScene from "./scenes/orbit";
+import { ReactNode, useState } from "react";
+import SceneList from "./common/common";
+import Overlay from "./overlay/overlay";
 
-function Wrapper() {
-  const ref = useRef<Mesh>(null!);
-  const { width, height } = useWindowSize();
+function App() {
+  const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
 
-  const mouseMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const x = e.clientX / width;
-    const y = e.clientY / height;
-
-    ref.current.rotation.y = x * Math.PI;
-    ref.current.rotation.x = y * Math.PI;
+  const renderScene = (scene: SceneList) => {
+    switch (scene) {
+      case "ORBIT":
+        return <OrbitScene></OrbitScene>;
+      default:
+        return (
+          <NoScene>
+            <p>Choisissez une scène</p>
+          </NoScene>
+        );
+    }
   };
 
   return (
-    <Canvas onPointerMove={(e) => mouseMove(e)}>
-      <mesh ref={ref}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshBasicMaterial color={"blue"} />
-      </mesh>
-    </Canvas>
-  );
-}
-
-function App() {
-  return (
     <Frame>
-      <Wrapper></Wrapper>
+      <OverlayWrapper>
+        <Overlay
+          currentScene={currentScene}
+          setCurrentScene={setCurrentScene}
+        />
+      </OverlayWrapper>
+      {renderScene(currentScene)}
     </Frame>
   );
 }
@@ -41,4 +39,17 @@ export default App;
 const Frame = styled.div`
   height: 100vh;
   width: 100%;
+`;
+
+const NoScene = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const OverlayWrapper = styled.div`
+  position: absolute;
+  z-index: 999;
 `;
