@@ -1,3 +1,3 @@
-type SceneList = "ORBIT" | "NONE";
+type SceneList = "ORBIT" | "WAVE" | "NONE";
 
 export default SceneList;

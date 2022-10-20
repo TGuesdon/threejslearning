@@ -1,15 +1,18 @@
 import "./App.css";
 import styled from "styled-components";
 import OrbitScene from "./scenes/orbit";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import SceneList from "./common/common";
 import Overlay from "./overlay/overlay";
+import WaveScene from "./scenes/wave";
 
 function App() {
   const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
 
   const renderScene = (scene: SceneList) => {
     switch (scene) {
+      case "WAVE":
+        return <WaveScene></WaveScene>;
       case "ORBIT":
         return <OrbitScene></OrbitScene>;
       default:
