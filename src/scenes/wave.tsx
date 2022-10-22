@@ -31,15 +31,24 @@ const vertexShader = glsl`
 `;
 
 const fragmentShader = glsl`
+  #pragma glslify: snoise3 = require(glsl-noise/simplex/3d);
+
   uniform float u_time;
   varying vec4 v_position;
   varying vec4 v_wave_position;
 
   void main() {
     float opacity = 1.0 - v_position.y / 2.0;
-    float green = v_position.y > 0.4 ? 0.2 : 0.0;
+    float green = v_position.y > 0.4 ? 0.1 : 0.0;
+    float blue = 1.0 - (1.0 + sin(snoise3(v_wave_position.xyz) / 3.0 + u_time) / 2.0) / 4.0;
 
-    gl_FragColor = vec4(0.0, green, 1.0, opacity);
+    bool white = v_wave_position.y > 2.05;
+
+    if(white){
+      gl_FragColor = vec4(0.0,0.2,blue,opacity);
+    } else {
+      gl_FragColor = vec4(0.0, green, blue, opacity);
+    }
   }
 `;
 
