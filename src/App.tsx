@@ -5,6 +5,7 @@ import { useState } from "react";
 import SceneList from "./common/common";
 import Overlay from "./overlay/overlay";
 import WaveScene from "./scenes/wave";
+import { ControlsScene } from "./scenes/controls";
 
 function App() {
   const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
@@ -15,6 +16,8 @@ function App() {
         return <WaveScene></WaveScene>;
       case "ORBIT":
         return <OrbitScene></OrbitScene>;
+      case "CONTROLS":
+        return <ControlsScene></ControlsScene>
       default:
         return (
           <NoScene>
