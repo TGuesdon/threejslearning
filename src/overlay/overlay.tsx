@@ -22,6 +22,7 @@ const Overlay: React.FC<OverlayProps> = ({
         }}
         value={currentScene}
       >
+        <option value={"ISLAND"}>Island</option>
         <option value={"WAVE"}>Wave</option>
         <option value={"CONTROLS"}>Controls</option>
         <option value={"ORBIT"}>Orbit</option>

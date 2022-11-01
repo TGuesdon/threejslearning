@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber"
 import { Physics, useBox } from "@react-three/cannon"
 import { useRef } from "react"
 import { Mesh } from "three"
+
 const Box: React.FC = () => {
     const [ref, api] = useBox(() => ({ mass: 1, position: [0, 2, 0] }), useRef<Mesh>(null))
     return (<mesh ref={ref}>

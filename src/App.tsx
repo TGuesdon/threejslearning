@@ -6,18 +6,21 @@ import SceneList from "./common/common";
 import Overlay from "./overlay/overlay";
 import WaveScene from "./scenes/wave";
 import { ControlsScene } from "./scenes/controls";
+import { IslandScene } from "./scenes/island";
 
 function App() {
   const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
 
   const renderScene = (scene: SceneList) => {
     switch (scene) {
+      case "ISLAND":
+        return <IslandScene></IslandScene>
       case "WAVE":
         return <WaveScene></WaveScene>;
       case "ORBIT":
         return <OrbitScene></OrbitScene>;
       case "CONTROLS":
-        return <ControlsScene></ControlsScene>
+        return <ControlsScene></ControlsScene>;
       default:
         return (
           <NoScene>
