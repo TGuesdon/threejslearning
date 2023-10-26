@@ -1,7 +1,7 @@
-import { OrbitControls } from "@react-three/drei"
-import { Canvas, useFrame } from "@react-three/fiber"
+import { OrbitControls } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
-import { generate, generateWCFIsland, Island, Point } from "tguesdon-island-generator"
+import { generateWCFIsland, Island } from "tguesdon-island-generator";
 import { DataTexture } from "three";
 const glsl = require("babel-plugin-glsl/macro");
 
@@ -67,17 +67,20 @@ const fragmentShader = glsl`
     }
 `;
 
-const IslandPlane:React.FC<{index: number}> = ({index}) => {
+const IslandPlane: React.FC<{ index: number }> = ({ index }) => {
     const islandWidth = 32;
     const islandHeight = 32;
 
-    const island: Island = useMemo(() => generateWCFIsland(islandWidth, islandHeight, 0.3, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], true), [islandWidth, islandHeight])
+    const island: Island = useMemo(
+        () => generateWCFIsland(islandWidth, islandHeight, 0.3, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], true),
+        [islandWidth, islandHeight]
+    );
     const dataHeight: Uint8Array = useMemo(() => {
         const size = islandWidth * islandHeight;
         const data = new Uint8Array(size * 4);
 
-        for(let x = 0; x < islandWidth; x++){
-            for(let y = 0; y < islandHeight; y++){
+        for (let x = 0; x < islandWidth; x++) {
+            for (let y = 0; y < islandHeight; y++) {
                 const idx = (y * islandWidth + x) * 4;
                 data[idx] = Math.floor(island.points[y][x].elevation * 255);
                 data[idx + 1] = Math.floor(island.points[y][x].elevation * 255);
@@ -87,7 +90,7 @@ const IslandPlane:React.FC<{index: number}> = ({index}) => {
         }
 
         return data;
-    }, [island])
+    }, [island]);
 
     const uniforms = useMemo(
         () => ({
@@ -95,14 +98,14 @@ const IslandPlane:React.FC<{index: number}> = ({index}) => {
                 value: 0,
             },
             u_height: {
-                value: new DataTexture(new Float32Array(), 0, 0)
-            }
+                value: new DataTexture(new Float32Array(), 0, 0),
+            },
         }),
         []
     );
 
     useEffect(() => {
-        const dataTex =  new DataTexture(dataHeight,islandWidth,islandHeight );
+        const dataTex = new DataTexture(dataHeight, islandWidth, islandHeight);
         dataTex.needsUpdate = true;
         uniforms.u_height.value = dataTex;
     }, [dataHeight, uniforms.u_height]);
@@ -111,26 +114,23 @@ const IslandPlane:React.FC<{index: number}> = ({index}) => {
         uniforms.u_time.value = state.clock.getElapsedTime();
     });
 
-    
     return (
-        <mesh position={[(index % 8) * islandWidth / 16 , Math.floor(index / 8) *  islandHeight / 16, 1]}>
-            <planeGeometry args={[islandWidth / 16, islandHeight / 16,islandWidth,islandHeight]}/>
-            <shaderMaterial
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-                wireframe={false}  
-            />
+        <mesh position={[((index % 8) * islandWidth) / 16, (Math.floor(index / 8) * islandHeight) / 16, 1]}>
+            <planeGeometry args={[islandWidth / 16, islandHeight / 16, islandWidth, islandHeight]} />
+            <shaderMaterial vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} wireframe={false} />
         </mesh>
-    )
-}
+    );
+};
 
 export const IslandScene: React.FC = () => {
     const tiles = 64;
 
     return (
-    <Canvas camera={{position: [0, 0, 1]}}>
-        <OrbitControls></OrbitControls>
-        {[...Array(tiles)].map((e, i) => <IslandPlane key={i} index={i}></IslandPlane>)}
-    </Canvas>)
-}
+        <Canvas camera={{ position: [0, 0, 1] }}>
+            <OrbitControls></OrbitControls>
+            {[...Array(tiles)].map((e, i) => (
+                <IslandPlane key={i} index={i}></IslandPlane>
+            ))}
+        </Canvas>
+    );
+};

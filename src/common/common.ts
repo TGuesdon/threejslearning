@@ -1,3 +1,3 @@
-type SceneList = "ISLAND" |"CONTROLS" | "ORBIT" | "WAVE" | "NONE";
+type SceneList = "ISLAND" | "CONTROLS" | "ORBIT" | "WAVE" | "VORONOI" | "NONE";
 
 export default SceneList;

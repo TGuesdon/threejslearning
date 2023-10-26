@@ -7,58 +7,58 @@ import Overlay from "./overlay/overlay";
 import WaveScene from "./scenes/wave";
 import { ControlsScene } from "./scenes/controls";
 import { IslandScene } from "./scenes/island";
+import { VoronoiScene } from "./scenes/voronoi";
 
 function App() {
-  const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
+    const [currentScene, setCurrentScene] = useState<SceneList>("NONE");
 
-  const renderScene = (scene: SceneList) => {
-    switch (scene) {
-      case "ISLAND":
-        return <IslandScene></IslandScene>
-      case "WAVE":
-        return <WaveScene></WaveScene>;
-      case "ORBIT":
-        return <OrbitScene></OrbitScene>;
-      case "CONTROLS":
-        return <ControlsScene></ControlsScene>;
-      default:
-        return (
-          <NoScene>
-            <p>Choisissez une scène</p>
-          </NoScene>
-        );
-    }
-  };
+    const renderScene = (scene: SceneList) => {
+        switch (scene) {
+            case "ISLAND":
+                return <IslandScene></IslandScene>;
+            case "WAVE":
+                return <WaveScene></WaveScene>;
+            case "ORBIT":
+                return <OrbitScene></OrbitScene>;
+            case "CONTROLS":
+                return <ControlsScene></ControlsScene>;
+            case "VORONOI":
+                return <VoronoiScene></VoronoiScene>;
+            default:
+                return (
+                    <NoScene>
+                        <p>Choisissez une scène</p>
+                    </NoScene>
+                );
+        }
+    };
 
-  return (
-    <Frame>
-      <OverlayWrapper>
-        <Overlay
-          currentScene={currentScene}
-          setCurrentScene={setCurrentScene}
-        />
-      </OverlayWrapper>
-      {renderScene(currentScene)}
-    </Frame>
-  );
+    return (
+        <Frame>
+            <OverlayWrapper>
+                <Overlay currentScene={currentScene} setCurrentScene={setCurrentScene} />
+            </OverlayWrapper>
+            {renderScene(currentScene)}
+        </Frame>
+    );
 }
 
 export default App;
 
 const Frame = styled.div`
-  height: 100vh;
-  width: 100%;
+    height: 100vh;
+    width: 100%;
 `;
 
 const NoScene = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const OverlayWrapper = styled.div`
-  position: absolute;
-  z-index: 999;
+    position: absolute;
+    z-index: 999;
 `;
